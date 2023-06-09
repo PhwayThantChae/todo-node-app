@@ -1,41 +1,41 @@
-'use strict';
+"use strict";
 
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 const Schema = mongoose.Schema;
 
 /**
- * User schema
+ * Todo schema
  */
-let UserSchema = new mongoose.Schema({
-    fullName: {
-        type: String, 
-        trim: true, 
-        required: true
-    },
-    email: {
-        type: String,
-        unique: true,
-        lowercase: true,
-        trim: true,
-        required: true
-    },
-    hash_password: {
-        type: String 
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
-    updatedAt: {
-        type: Date,
-        default: Date.now
-    }
+
+const TodoSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  description: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  completed: {
+    type: Boolean,
+    default: false
+  },
+  isDeleted: {
+    type: Boolean,
+    default: false
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  },
 });
 
-UserSchema.methods.comparePassword = (password) => {
-    return bcrypt.compareSync(password, this.hash_password);
-}
-
-mongoose.model("User", UserSchema);
+mongoose.model("Todo", TodoSchema);

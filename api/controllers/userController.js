@@ -24,12 +24,6 @@ exports.register = async (req, res) => {
 exports.sign_in = async (req, res) => {
     try {
       const user = await User.findOne({ email: req.body.email });
-      console.log("**********************");
-      console.log("**********************");
-      console.log("**********************");
-      console.log("**********************");
-      console.log("**********************");
-      console.log("**********************");
   
       if (!user || !bcrypt.compare(req.body.password, user.hash_password)) {
         return res.status(401).json({

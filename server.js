@@ -6,10 +6,12 @@ const port = process.env.PORT || 3000;
 require('dotenv').config();
 
 const User = require("./api/models/userModel");
+const Todo = require("./api/models/todoModel");
 const apiV1Router = express.Router();
 const bodyParser = require("body-parser");
 const jsonwebtoken = require("jsonwebtoken");
 const userRoutes = require("./api/routes/userRoutes");
+const todoRoutes = require("./api/routes/todoRoutes");
 
 const mongoose = require("mongoose");
 const option = {
@@ -56,6 +58,7 @@ app.use((req, res, next) => {
 // Prefix routes with "api/v1"
 app.use("/api/v1", apiV1Router);
 userRoutes(apiV1Router);
+todoRoutes(apiV1Router);
 
 app.use((req, res) => {
   res.status(404).send({ url: req.originalUrl + " not found" });
