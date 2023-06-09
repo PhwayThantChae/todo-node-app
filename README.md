@@ -10,7 +10,7 @@
 - Run ``npm start`` to start the server.
 
 ### Environment Variables
-- You need to add the following environment variables on production deployment:
+- You need to add the following environment variables on .env file:
 	- MONGO_DB_URL
 	- JWT_SECRET
 
@@ -26,7 +26,7 @@
   - Status Code: 201 (Created)
   - JWT Token
 
-### Sign In
+### Register
 - **Endpoint:** `/api/v1/auth/register`
 - **Method:** POST
 - **Description:** User registration.
