@@ -49,7 +49,7 @@
 ### Get Todos
 - **Endpoint:** `/api/v1/todos`
 - **Method:** GET
-- **Description:** Retrieve all todos.
+- **Description:** Retrieve all todos by logged in user.
 - **Response:**
   - Status Code: 200 (OK)
   - Body: Array of todos

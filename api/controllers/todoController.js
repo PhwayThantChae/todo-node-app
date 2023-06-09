@@ -6,7 +6,8 @@ const jwt = require("jsonwebtoken");
 let Todo = mongoose.model("Todo");
 
 exports.addTodo = async (req, res) => {
-  let newTodo = new Todo(req.body);
+  let todo = { ...req.body, createdByUser: req.user._id };
+  let newTodo = new Todo(todo);
   try {
     const todo = await newTodo.save();
     return res.json(todo);
@@ -20,7 +21,10 @@ exports.addTodo = async (req, res) => {
 
 exports.listTodos = async (req, res) => {
   try {
-    const todos = await Todo.find({ isDeleted: false });
+    const todos = await Todo.find({
+      isDeleted: false,
+      createdByUser: req.user._id,
+    });
     return res.json(todos);
   } catch (error) {
     console.log(error);
@@ -37,7 +41,9 @@ exports.deleteTodo = async (req, res) => {
         isDeleted: true,
       },
     };
-    const todo = await Todo.findById(req.params.id);
+    const todo = await Todo.findById(req.params.id)
+      .where("createdByUser")
+      .equals(req.user._id);
 
     if (!todo) {
       res.status(400);
@@ -70,7 +76,9 @@ exports.updateTodo = async (req, res) => {
         completed: req.body.completed,
       },
     };
-    const todo = await Todo.findById(req.params.id);
+    const todo = await Todo.findById(req.params.id)
+      .where("createdByUser")
+      .equals(req.user._id);
 
     if (!todo) {
       res.status(400);
@@ -96,7 +104,13 @@ exports.updateTodo = async (req, res) => {
 
 exports.showTodo = async (req, res) => {
   try {
-    const todo = await Todo.findOne({ _id: req.params.id });
+    const todo = await Todo.findOne({ _id: req.params.id })
+      .where("createdByUser")
+      .equals(req.user._id);
+    if (!todo) {
+      res.status(400);
+      throw new Error("Todo not found");
+    }
     return res.json(todo);
   } catch (error) {
     console.log(error);
