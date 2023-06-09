@@ -19,19 +19,89 @@ exports.addTodo = async (req, res) => {
 };
 
 exports.listTodos = async (req, res) => {
-    try {
-        const todos = await Todo.find({});
-        return res.json(todos);
-    } catch {
-        console.log(error);
-        return res.status(400).send({
-            message: error.message,
-        });
+  try {
+    const todos = await Todo.find({ isDeleted: false });
+    return res.json(todos);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send({
+      message: error.message,
+    });
+  }
+};
+
+exports.deleteTodo = async (req, res) => {
+  try {
+    const updateData = {
+      $set: {
+        isDeleted: true,
+      },
+    };
+    const todo = await Todo.findById(req.params.id);
+
+    if (!todo) {
+      res.status(400);
+      throw new Error("Todo not found");
     }
-}
 
-exports.deleteTodo = async (req, res) => {}
+    const deletedTodo = await Todo.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      {
+        new: true,
+      }
+    );
 
-exports.updateTodo = async (req, res) => {}
+    res.json(deletedTodo);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send({
+      message: error.message,
+    });
+  }
+};
 
-exports.showTodo = async (req, res) => {}
+exports.updateTodo = async (req, res) => {
+  try {
+    const updateData = {
+      $set: {
+        title: req.body.title,
+        description: req.body.description,
+        completed: req.body.completed,
+      },
+    };
+    const todo = await Todo.findById(req.params.id);
+
+    if (!todo) {
+      res.status(400);
+      throw new Error("Todo not found");
+    }
+
+    const updatedTodo = await Todo.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      {
+        new: true,
+      }
+    );
+
+    res.json(updatedTodo);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send({
+      message: error.message,
+    });
+  }
+};
+
+exports.showTodo = async (req, res) => {
+  try {
+    const todo = await Todo.findOne({ _id: req.params.id });
+    return res.json(todo);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send({
+      message: error.message,
+    });
+  }
+};
