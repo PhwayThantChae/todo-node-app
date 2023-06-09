@@ -4,6 +4,13 @@
 - Node v18.16.0
 - MongoDB
 
+## Library
+- Node v18.16.0
+- Express
+- Mongoose
+- JWT
+- MongoDB
+
 ## Setting up Development Instance
 - Create a new mongodb database
 - Run ``npm install``.
